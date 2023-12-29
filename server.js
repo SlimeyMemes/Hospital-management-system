@@ -1,8 +1,12 @@
 const express = require('express');
 const colors = require('colors');
 const morgan = require('morgan');
+const connectDB = require('./config/db');
 const dotenv = require('dotenv').config();
+const cors = require('cors')
 
+//database connection
+connectDB();
 
 //rest
 const app = express()
@@ -10,14 +14,10 @@ const app = express()
 //middleware
 app.use(express.json())
 app.use(morgan('dev'))
+app.use(cors())
 
 //routes
-app.get('/',(req,res) => {
-    res.status(200).send(({
-        message: "server running",
-
-    }))
-});
+app.use('/api/v1/user', require('./routes/userRoutes'));
 
 //port
 const port = process.env.PORT || 8080

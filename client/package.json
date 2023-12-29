@@ -1,7 +1,7 @@
 {
   "name": "client",
-  "proxy": "https://localhost:8080",
-  "private": true,
+  "proxy": "http://localhost:8080",
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
