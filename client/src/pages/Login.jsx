@@ -1,12 +1,27 @@
 import Header from '../components/header'
-import {Link} from 'react-router-dom'
-import {Form, Input} from 'antd';
+import {Link, useNavigate} from 'react-router-dom'
+import {Form, Input,message} from 'antd';
 import '../styles/LoginStyle.css'
+import axios from 'axios'
 
 const Login  = () => {
-  const onfinish = (values) =>
+  const navigate = useNavigate();
+  const onfinish = async(values) =>
   {
-    console.log(values);
+    try{
+      const res = await axios.post('/api/v1/user/login', values)
+      if(res.data.sucess)
+      {
+        localStorage.setItem('token', res.data.token)
+        message.success('Logged in Sucessfully')
+        navigate('/patient')
+      } else {
+        message.error(res.data.message)
+      }
+  } catch (err) {
+      console.log(err)
+      message.error(`Something went wrong`)
+    }
   }
     return (
       <>
@@ -22,7 +37,7 @@ const Login  = () => {
         </Form.Item>
         <div>
         <Link to = '/register'><h3>Not a user ?</h3></Link>
-        <button className='btn btn-primary' type='submit'>Register</button>
+        <button className='btn btn-primary' type='submit'>Login</button>
         </div>
       </Form>
     </div>

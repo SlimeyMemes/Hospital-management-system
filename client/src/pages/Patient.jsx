@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import axios from 'axios';
 import { LaptopOutlined, NotificationOutlined, UserOutlined,SnippetsOutlined,LogoutOutlined } from '@ant-design/icons';
 import React from 'react'
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
@@ -14,6 +16,20 @@ const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined,SnippetsOutli
   };
 });
 const Patient = () => {
+  const getUserData = async() => {
+    try {
+      await axios.post('/api/v1/user/getUser', {},{
+        headers:{
+        Authorization : "Bearer " + localStorage.getItem("token"),
+        }
+      })
+    }catch(err) {
+      console.log(err)
+    }
+  }
+  useEffect(() => {
+    getUserData();
+  })
     const {
         token: { colorBgContainer, borderRadiusLG },
       } = theme.useToken();
