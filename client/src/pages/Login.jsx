@@ -2,7 +2,7 @@ import Header from '../components/header'
 import {Link, useNavigate} from 'react-router-dom'
 import {Form, Input,message} from 'antd';
 import {useDispatch} from 'react-redux'
-import {showLoading,hideLoading} from '../redux/feature/alterSlice';
+import {showLoading,hideLoading} from '../redux/feature/alertSlice';
 import '../styles/LoginStyle.css'
 import axios from 'axios'
 

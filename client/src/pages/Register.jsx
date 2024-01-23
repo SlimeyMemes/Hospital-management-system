@@ -4,14 +4,14 @@ import {Link, useNavigate} from 'react-router-dom'
 import Header from '../components/header'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'; 
-import { showloading,hideLoading } from '../redux/feature/alterSlice';
+import { showLoading,hideLoading } from '../redux/feature/alertSlice';
 const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onfinish = async(values) =>
   {
     try{
-      dispatch(showloading());
+      dispatch(showLoading());
       const res = await axios.post('/api/v1/user/register', values)
       dispatch(hideLoading());
       if(res.data.sucess)

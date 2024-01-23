@@ -6,9 +6,9 @@ export const alertSlice = createSlice({
         loading: false
     },
         reducers:{
-            showloading: (state) => {state.loading = true},
+            showLoading: (state) => {state.loading = true},
             hideLoading: (state) => {state.loading = false}
         }
     })
 
-    export const {showloading, hideLoading} = alertSlice.actions
+    export const {showLoading, hideLoading} = alertSlice.actions
