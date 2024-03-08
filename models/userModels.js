@@ -13,6 +13,14 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:[true,'password is requried']
     },
+    isAdmin:{
+        type:Boolean,
+        default:false
+    },
+    isDoctor:{
+        type:Boolean,
+        default:false
+    }
 })
 
 const userModel = mongoose.model('user', userSchema)
