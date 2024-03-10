@@ -10,6 +10,7 @@ import Doctors from "../pages/Doctors";
 import Users from "../pages/Users";
 import { useSelector } from "react-redux";
 import UserPic from "../components/UserPic";
+import addDoctor from "../pages/addDoctor";
 
 const { Header, Content, Sider } = Layout;
 const pages = {
@@ -19,6 +20,7 @@ const pages = {
   "medical records": Dashboard,
   doctors: Doctors,
   users: Users,
+  "add doctor": addDoctor,
 };
 
 const item = "profile";

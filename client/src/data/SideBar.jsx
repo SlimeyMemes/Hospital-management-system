@@ -31,11 +31,12 @@ const user = [
 
 export const UserSideBar = user;
 
-const b = ["Profile", "Doctors", "Users", "Log Out"];
+const b = ["Profile", "Add Doctor", "Doctors", "Users", "Log Out"];
 const admin = [
   UserOutlined,
   LaptopOutlined,
   NotificationOutlined,
+  SnippetsOutlined,
   LogoutOutlined,
 ].map((icon, index) => {
   const key = b[index];
