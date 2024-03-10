@@ -61,11 +61,8 @@ const authCtrl = async(req,res) => {
                 sucess: false
             })
         }else{
-            res.status(200).send({
-                data:{
-                    name: user.name,
-                    email: user.email,
-                },
+            user.password = undefined
+            res.status(200).send({success: true, data: user
             })
         }
     }catch(err) {
