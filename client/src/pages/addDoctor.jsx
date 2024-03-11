@@ -42,6 +42,16 @@ const AddDoctor = () => {
         <Form.Item label="Phone no:" name="phone">
           <Input type="text" required />
         </Form.Item>
+        <Form.Item label="Website (Optional)" name="website">
+          <Input type="text" />
+        </Form.Item>
+        <Form.Item label="Specialization" name="specialization">
+          <Input type="text" required />
+        </Form.Item>
+        <Form.Item label="Experience" name="experience" placeholder="5">
+          <Input type="number" required />
+        </Form.Item>
+        <Form.Item label="Timings" name="timmings"></Form.Item>
       </Form>
     </div>
   );
