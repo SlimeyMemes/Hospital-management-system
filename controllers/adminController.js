@@ -1,9 +1,10 @@
 const doctorModel = require('../models/doctorModel');
 const userModel = require('../models/userModels');
+const bcrpyt = require('bcryptjs')
 
 const doctorController = async(req,res) => {
 try{
-    const exists = await userModel.findOne({email:req.body.email}) && doctorModel.findOne({email:req.body.email})
+    const exists = await userModel.findOne({email:req.body.email})
     if(exists)
     {
         return res
@@ -14,14 +15,41 @@ try{
     const salt = await bcrpyt.gensalt()
     const hashedPassword = await bcrypt.hash(password,salt)
     req.body.password = hashedPassword
-    const newUser = new docotorModel(req.body)
+    const newDoctor = new doctorModel(req.body)
+    await newDoctor.save()
+    const newUser = new userModel(req.body)
+    newUser.isDoctor = true;
     await newUser.save()
     res.status(201).send({message: 'doctor added successfully',success:true});
 }
 
 catch(err){
-
+    console.log(err)
+    return res.status(500).send({success:false,message: `Doctor ${err.message}`});
 }
 }
 
-module.exports = doctorController;
+const doctorData = async(req,res) => { 
+    try{
+    const doctor = await userModel.findOne({_id:req.body.userId})
+    if(!doctor)
+    {
+        return res.status(200).send({
+            message: 'doctor not found',
+            success:false
+        })
+    }else{
+        doctor.password = undefined
+        res.status(200).send({success: true, data : doctor})
+    }
+}catch(err)
+{
+    console.log(err)
+    res.status(500).send({
+        message:'something wrong happend',
+        success: false,
+        err
+    })
+}
+}
+module.exports = {doctorData , doctorController};

@@ -5,10 +5,6 @@ const doctorScheme = new mongoose.Schema({
         type:String,
         required:[true,'username is required']
     },
-    password:{
-        type:String,
-        required:[true,'password is requried']
-    },
     firstName:{
         type:String,
         required:[true,'first name is required']

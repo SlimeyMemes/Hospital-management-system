@@ -1,4 +1,4 @@
-import { Form, message } from "antd";
+import { Form, message, Input } from "antd";
 import { showLoading, hideLoading } from "../redux/feature/alertSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -21,8 +21,28 @@ const AddDoctor = () => {
       <Form
         layout="vertical"
         onFinish={onfinish}
-        className="login-form card p-5"
-      ></Form>
+        className="add-doctor card p-5"
+      >
+        <h3>Add Doctor</h3>
+        <Form.Item label="Email" name="email">
+          <Input type="email" require />
+        </Form.Item>
+        <Form.Item label="Username" name="name">
+          <Input type="text" required />
+        </Form.Item>
+        <Form.Item label="Password" name="password">
+          <Input type="password" required />
+        </Form.Item>
+        <Form.Item label="First Name" name="firstName">
+          <Input type="text" required />
+        </Form.Item>
+        <Form.Item label="Last Name" name="lastName">
+          <Input type="text" required />
+        </Form.Item>
+        <Form.Item label="Phone no:" name="phone">
+          <Input type="text" required />
+        </Form.Item>
+      </Form>
     </div>
   );
 };
