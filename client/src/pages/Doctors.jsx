@@ -1,6 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Table, Button, Modal, Form, Row, Col, Input, TimePicker } from "antd";
+import {
+  Table,
+  Button,
+  Modal,
+  Form,
+  Row,
+  Col,
+  Input,
+  TimePicker,
+  message,
+} from "antd";
 import moment from "moment";
 
 const timingstyle = {
@@ -14,6 +24,8 @@ const Doctors = () => {
   const [passwordOnOpen, setPasswordModalOpen] = useState(false);
 
   const [form] = Form.useForm();
+  const [mail] = Form.useForm();
+  const [timings] = Form.useForm();
   const getDoctorData = async () => {
     try {
       const res = await axios.get("/api/v1/admin/getDoctors");
@@ -28,15 +40,40 @@ const Doctors = () => {
     getDoctorData();
   }, []);
 
-  const removeItem = () => {};
-  const changePassword = () => {};
-  const handlePasswordOk = () => {
-    setPasswordModalOpen(false);
+  const removeItem = async (record) => {
+    try {
+      await axios.post("/api/v1/admin/removeDoctor", record);
+      getDoctorData();
+      message.success("Removed Doctor");
+    } catch (err) {
+      message.error("Something went wrong");
+      console.log(err);
+    }
+  };
+  const changePassword = (record) => {
+    mail.setFieldsValue(record);
+    setPasswordModalOpen(true);
+  };
+
+  const handlePasswordOk = async (values) => {
+    try {
+      const res = await axios.post("/api/v1/admin/updateDoctor", values);
+      if (res.data.success) {
+        message.success("Password Updated");
+        setPasswordModalOpen(false);
+      } else {
+        message.error(res.data.message);
+      }
+    } catch (err) {
+      console.log(err);
+      message.error("Something went wrong");
+    }
   };
   const handlePasswordCancel = () => {
     setPasswordModalOpen(false);
   };
-  const timingOnClick = () => {
+  const timingOnClick = (record) => {
+    timings.setFieldValue("name", record.name);
     setTimingModalOpen(true);
   };
   const handleTimingCancel = () => {
@@ -47,13 +84,38 @@ const Doctors = () => {
     setEditModalOpen(true);
   };
 
-  const handleEditOk = () => {
-    setEditModalOpen(false);
+  const handleEditOk = async (values) => {
+    try {
+      const res = await axios.post("/api/v1/admin/updateDoctorProfile", values);
+      if (res.data.success) {
+        message.success("Fields Updated");
+        setEditModalOpen(false);
+        getDoctorData();
+      } else {
+        message.error(res.data.message);
+      }
+    } catch (err) {
+      console.log(err);
+      message.error("Something went wrong");
+    }
   };
   const handleCancel = () => {
     setEditModalOpen(false);
   };
-  const handleTimingOk = () => {
+  const handleTimingOk = async (values) => {
+    try {
+      const res = await axios.post("/api/v1/admin/updateDoctorProfile", values);
+      if (res.data.success) {
+        message.success("Timings Updated");
+        getDoctorData();
+      } else {
+        message.error(res.data.message);
+      }
+    } catch (err) {
+      console.log(err);
+      message.error("Something went wrong");
+    }
+
     setTimingModalOpen(false);
   };
 
@@ -83,7 +145,7 @@ const Doctors = () => {
     {
       title: "Timings",
       dataIndex: "timings",
-      render: (text) => {
+      render: (text, record) => {
         return (
           <div style={timingstyle}>
             <p>
@@ -91,7 +153,7 @@ const Doctors = () => {
                 " - " +
                 moment(text[1]).format("HH")}
             </p>
-            <Button size="medium" onClick={timingOnClick}>
+            <Button size="medium" onClick={() => timingOnClick(record)}>
               Edit Timings
             </Button>
           </div>
@@ -106,9 +168,9 @@ const Doctors = () => {
     },
     {
       title: "Authentication",
-      render: () => {
+      render: (record) => {
         return (
-          <Button type="primary" onClick={changePassword}>
+          <Button type="primary" onClick={() => changePassword(record)}>
             Edit Password
           </Button>
         );
@@ -116,9 +178,9 @@ const Doctors = () => {
     },
     {
       title: "Remove ?",
-      render: () => {
+      render: (record) => {
         return (
-          <Button danger onClick={removeItem}>
+          <Button danger onClick={() => removeItem(record)}>
             Remove
           </Button>
         );
@@ -128,11 +190,15 @@ const Doctors = () => {
 
   return (
     <>
+      <h2>Doctor List</h2>
       <Modal
         title="Edit Modal"
         open={editModalOpen}
-        onOk={handleEditOk}
-        onCancel={handleCancel}
+        footer={[
+          <Button key="cancel" onClick={handleCancel}>
+            Cancel
+          </Button>,
+        ]}
         width={1000}
       >
         <Form
@@ -190,32 +256,55 @@ const Doctors = () => {
               </Form.Item>
             </Col>
           </Row>
+          <Button type="primary" htmlType="submit">
+            Ok
+          </Button>
         </Form>
       </Modal>
 
       <Modal
         title="Edit Timings"
         open={timingModalOpen}
-        onOk={handleTimingOk}
         onCancel={handleTimingCancel}
+        footer={[
+          <Button key="Cancel" onClick={handleTimingCancel}>
+            Cancel
+          </Button>,
+        ]}
       >
-        <Form>
-          <Form.Item>
-            <TimePicker.RangePicker format="HH"></TimePicker.RangePicker>
+        <Form form={timings} onFinish={handleTimingOk}>
+          <Form.Item name="name" hidden="true">
+            <Input type="string"></Input>
           </Form.Item>
+          <Form.Item label="Timings" name="timings">
+            <TimePicker.RangePicker format="HH" />
+          </Form.Item>
+          <Button type="primary" htmlType="submit">
+            Ok
+          </Button>
         </Form>
       </Modal>
 
       <Modal
         title="Edit Password"
         open={passwordOnOpen}
-        onOk={handlePasswordOk}
         onCancel={handlePasswordCancel}
+        footer={[
+          <Button key="Cancel" onClick={handlePasswordCancel}>
+            Cancel
+          </Button>,
+        ]}
       >
-        <Form>
+        <Form form={mail} onFinish={handlePasswordOk}>
+          <Form.Item label="Email" name="email" hidden="true">
+            <Input type="email"></Input>
+          </Form.Item>
           <Form.Item label="Change Password" name="password">
             <Input type="password"></Input>
           </Form.Item>
+          <Button type="primary" htmlType="submit">
+            Ok
+          </Button>
         </Form>
       </Modal>
       <Table dataSource={doctors} columns={items}></Table>

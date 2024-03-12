@@ -52,4 +52,69 @@ const doctorData = async(req,res) => {
     })
 }
 }
-module.exports = {doctorData , doctorController};
+
+const updateDoctor = async(req,res) => {
+    const password = req.body.password
+    const salt = await bcrpyt.genSalt()
+    const hashedPassword = await bcrpyt.hash(password,salt)
+    try{
+        pass = await userModel.findOneAndUpdate({email:req.body.email},req.body)
+        if(!pass)
+        {
+            return res.status(200).send({
+                message: 'doctor not found',
+                success:false
+            })
+        }
+        else{
+        return res.status(200).send({success: true, message: "Data updated"})
+        }
+    }
+    catch(err)
+    {
+        return res.status(500).send({success: false, message:"Something went wrong"})
+    }
+}
+
+const updateDoctorProfile = async(req,res) =>
+{
+    try{
+        doc = await doctorModel.findOneAndUpdate({name:req.body.name},req.body)
+        if(!doc)
+        {
+            return res.status(200).send({
+                message: 'doctor not found',
+                success:false
+            })
+        }else{
+            return res.status(200).send({success: true, message: "Data updated"})
+        }
+    }
+    catch(err)
+    {
+        return res.status(500).send({success: false, message:"Something went wrong"})
+    }
+}
+
+const removeDoctor = async(req,res) =>
+{
+    try{
+        docUser = await userModel.findOneAndDelete({name:req.body.name})
+        doc = await doctorModel.findOneAndDelete({name:req.body.name})
+
+        if(!(docUser && doc))
+        {
+            return res.status(200).send({
+                message: 'doctor not found',
+                success:false
+            })
+        }else{
+            return res.status(200).send({success: true, message: "Data updated"})
+        }
+    }
+    catch(err){
+        console.log(err);
+        return res.status(500).send({success: false, message:"Something went wrong"})
+    }
+}
+module.exports = {doctorData , doctorController, updateDoctor, updateDoctorProfile, removeDoctor};
