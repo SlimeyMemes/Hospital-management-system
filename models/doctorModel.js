@@ -32,12 +32,12 @@ const doctorScheme = new mongoose.Schema({
         type:String,
         required:[true,'exp requried']
     },
-    timings: {
-        type:Object,
+    timings: { 
+        type:Array,
         required:[true,'work timing is required']
-    }
+    },
 },
-    {timestamps: true}
+    {timestamps: false}
 
 );
 

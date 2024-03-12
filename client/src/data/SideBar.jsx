@@ -57,7 +57,7 @@ const c = [
   "Log Out",
 ];
 const doctor = [
-  UserOutlined,
+  LaptopOutlined,
   LaptopOutlined,
   NotificationOutlined,
   SnippetsOutlined,

@@ -3,7 +3,7 @@ import axios from "axios";
 import { Layout, Menu } from "antd";
 import "../styles/PatientStyle.css";
 import Dashboard from "../components/Dashboard";
-import { UserSideBar, AdminSideBar } from "../data/SideBar";
+import { UserSideBar, DoctorSideBar, AdminSideBar } from "../data/SideBar";
 import Homepage from "./HomePage";
 import Profile from "../components/Profile";
 import Doctors from "../pages/Doctors";
@@ -27,7 +27,17 @@ const item = "profile";
 
 const Patient = () => {
   const { user } = useSelector((state) => state.user);
-  const sidebar = user?.isAdmin ? AdminSideBar : UserSideBar;
+  const sidebar = () => {
+    if (user) {
+      if (user.isAdmin) {
+        return AdminSideBar;
+      } else if (user.isDoctor) {
+        return DoctorSideBar;
+      } else {
+        return UserSideBar;
+      }
+    }
+  };
   const [currentPage, setCurrentPage] = useState(item);
   function render(props) {
     // eslint-disable-next-line react/prop-types
@@ -78,7 +88,7 @@ const Patient = () => {
               id="menu"
               mode="inline"
               defaultSelectedKeys={["1"]}
-              items={sidebar}
+              items={sidebar()}
               onClick={handleClick}
             />
           </Sider>

@@ -12,15 +12,15 @@ try{
             .send({message:`User Already Exists`, success:false})
     }
     const password = req.body.password
-    const salt = await bcrpyt.gensalt()
-    const hashedPassword = await bcrypt.hash(password,salt)
+    const salt = await bcrpyt.genSalt()
+    const hashedPassword = await bcrpyt.hash(password,salt)
     req.body.password = hashedPassword
     const newDoctor = new doctorModel(req.body)
     await newDoctor.save()
     const newUser = new userModel(req.body)
     newUser.isDoctor = true;
     await newUser.save()
-    res.status(201).send({message: 'doctor added successfully',success:true});
+    res.status(201).send({message: 'Doctor added successfully',success:true});
 }
 
 catch(err){
@@ -31,7 +31,7 @@ catch(err){
 
 const doctorData = async(req,res) => { 
     try{
-    const doctor = await userModel.findOne({_id:req.body.userId})
+    const doctor = await doctorModel.find({})
     if(!doctor)
     {
         return res.status(200).send({
