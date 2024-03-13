@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Layout, Menu } from "antd";
 import "../styles/PatientStyle.css";
-import Dashboard from "../components/Dashboard";
+import UserProfile from "../components/UserProfile";
 import { UserSideBar, DoctorSideBar, AdminSideBar } from "../data/SideBar";
 import Homepage from "./HomePage";
-import Profile from "../components/Profile";
+import Dashboard from "../pages/Dashboard";
 import Doctors from "../pages/Doctors";
 import Users from "../pages/Users";
 import { useSelector } from "react-redux";
@@ -14,10 +14,11 @@ import addDoctor from "../pages/addDoctor";
 
 const { Header, Content, Sider } = Layout;
 const pages = {
-  profile: Profile,
+  profile: UserProfile,
+  dashboard: Dashboard,
   appoinments: Homepage,
-  announcements: Dashboard,
-  "medical records": Dashboard,
+  announcements: Homepage,
+  "medical records": Homepage,
   doctors: Doctors,
   users: Users,
   "add doctor": addDoctor,

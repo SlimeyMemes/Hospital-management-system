@@ -31,7 +31,7 @@ const user = [
 
 export const UserSideBar = user;
 
-const b = ["Profile", "Add Doctor", "Doctors", "Users", "Log Out"];
+const b = ["Dashboard", "Add Doctor", "Doctors", "Users", "Log Out"];
 const admin = [
   UserOutlined,
   LaptopOutlined,
