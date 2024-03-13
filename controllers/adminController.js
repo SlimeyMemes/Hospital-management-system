@@ -117,4 +117,46 @@ const removeDoctor = async(req,res) =>
         return res.status(500).send({success: false, message:"Something went wrong"})
     }
 }
-module.exports = {doctorData , doctorController, updateDoctor, updateDoctorProfile, removeDoctor};
+
+const getAllUsers = async(req,res) => {
+    try{
+        users = await userModel.find({isDoctor:false})
+        if(!users)
+        {
+            return res.status(500).send({success: false, message: "Something went wrong"})
+        }
+        else{
+            return res.status(200).send({success: true,data: users});
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+        return res.status(500).send({success: false, message:"Something went wrong"}) 
+    }
+}
+
+const deleteUser = async(req,res) =>
+{
+    try{
+        await userModel.findOneAndDelete({name:req.body.name})
+        return res.status(200).send({success:true,message: "User Deleted"})
+    }
+    catch(err)
+    {
+        console.log(err)
+        return res.status(500).send({success:false,message: "Coudnt Find user"})
+    }
+}
+const updateUser = async(req,res) => {
+    try{
+        await userModel.findOneAndUpdate({name:req.body.name},{isAdmin:!req.body.isAdmin})
+        return res.status(200).send({success:true,message: "Updated"})
+    }
+    catch(err)
+    {
+        console.log(err);
+        return res.status(500).send({success:false,message: "Coudnt Find user"})
+    }
+}
+module.exports = {doctorData , doctorController, updateDoctor, updateDoctorProfile, removeDoctor,getAllUsers,deleteUser,updateUser};
