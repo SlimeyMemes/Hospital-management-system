@@ -1,5 +1,5 @@
 const express = require('express');
-const { loginController, registerController, authCtrl } = require('../controllers/userCtrl');
+const { loginController, registerController, authCtrl,getAppointments,getSpecDoctor } = require('../controllers/userCtrl');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 //router
@@ -12,4 +12,7 @@ router.post('/login',loginController)
 
 //Auth
 router.post('/getUser',authMiddleware, authCtrl)
+
+router.get('/getAppointments',getAppointments)
+router.post('/getSpecDoctor',getSpecDoctor)
 module.exports = router; 

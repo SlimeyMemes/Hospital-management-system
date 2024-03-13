@@ -7,17 +7,10 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 
-const a = [
-  "Profile",
-  "Appoinments",
-  "Announcements",
-  "Medical Records",
-  "Log Out",
-];
+const a = ["Profile", "Appoinments", "Medical Records", "Log Out"];
 const user = [
   UserOutlined,
   LaptopOutlined,
-  NotificationOutlined,
   SnippetsOutlined,
   LogoutOutlined,
 ].map((icon, index) => {

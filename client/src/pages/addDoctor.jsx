@@ -1,6 +1,16 @@
-import { Form, Input, Row, Col, TimePicker, message, Button } from "antd";
+import {
+  Form,
+  Input,
+  Row,
+  Col,
+  TimePicker,
+  message,
+  Button,
+  Select,
+} from "antd";
 import axios from "axios";
 import "../styles/doctorStyle.css";
+import options from "../data/Specialization";
 const AddDoctor = () => {
   const onfinish = async (values) => {
     try {
@@ -60,7 +70,7 @@ const AddDoctor = () => {
           </Col>
           <Col xs={24} md={24} lg={8}>
             <Form.Item label="Specialization" name="specialization">
-              <Input type="text" required />
+              <Select options={options}></Select>
             </Form.Item>
           </Col>
           <Col xs={24} md={24} lg={8}>

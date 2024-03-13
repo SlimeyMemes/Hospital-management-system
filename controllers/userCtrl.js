@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken')
 const userModel = require('../models/userModels')
+const appointmentModel = require('../models/userAppointmentModel')
+const doctorModel = require('../models/doctorModel')
 const bcrpyt = require('bcryptjs')
 
 const registerController = async(req,res) => {
@@ -76,4 +78,44 @@ const authCtrl = async(req,res) => {
 
 }
 
-module.exports = {loginController, registerController, authCtrl };
+const getAppointments = async(req,res) =>
+{
+    try{
+        const appointments = await appointmentModel.find({})
+
+        return res.status(200).send({
+            success:true,
+            data: appointments
+        })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+const getSpecDoctor = async(req,res) =>
+{
+    console.log(req.body)
+     try{
+       const docs = await doctorModel.find({specialization:req.body.specialization})
+        if(!docs){
+            res.status(500).send({
+                success:false,
+                message:"It dont work"
+            })
+        }
+            else{
+                res.status(200).send({
+                    success:true,
+                    data: docs
+                })
+            }
+        }
+        catch(err)
+        {
+            console.log(err)
+        }
+    }
+
+module.exports = {loginController, registerController, authCtrl ,getAppointments,getSpecDoctor};

@@ -11,14 +11,15 @@ import Users from "../pages/Users";
 import { useSelector } from "react-redux";
 import UserPic from "../components/UserPic";
 import addDoctor from "../pages/addDoctor";
+import BookAppointments from "./BookAppointments";
+import MedicalRecords from "./MedicalRecords";
 
 const { Header, Content, Sider } = Layout;
 const pages = {
   profile: UserProfile,
   dashboard: Dashboard,
-  appoinments: Homepage,
-  announcements: Homepage,
-  "medical records": Homepage,
+  appoinments: BookAppointments,
+  "medical records": MedicalRecords,
   doctors: Doctors,
   users: Users,
   "add doctor": addDoctor,
