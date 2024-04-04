@@ -1,12 +1,16 @@
 const mongoose = require('mongoose')
 
 const userAppointment = new mongoose.Schema({
-    userName:{
+    name:{
         type:String,
         required:[true,'username is required']
     },
     upcommingAppointments:{
         type:Array,
+        name: {
+            type:String,
+            required:[true]
+        },
         doctorName:{
             type:String,
             required:[true,'doctor name is required']

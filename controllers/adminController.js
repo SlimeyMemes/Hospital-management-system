@@ -1,3 +1,4 @@
+const doctorAppointmentModel = require('../models/doctorAppointmentModel');
 const doctorModel = require('../models/doctorModel');
 const userModel = require('../models/userModels');
 const bcrpyt = require('bcryptjs')
@@ -20,6 +21,9 @@ try{
     const newUser = new userModel(req.body)
     newUser.isDoctor = true;
     await newUser.save()
+    req.body.doctorName = req.body.firstName + " " + req.body.lastName
+    const newAppointment = new doctorAppointmentModel(req.body)
+    await newAppointment.save()
     res.status(201).send({message: 'Doctor added successfully',success:true});
 }
 

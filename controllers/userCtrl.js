@@ -3,6 +3,7 @@ const userModel = require('../models/userModels')
 const appointmentModel = require('../models/userAppointmentModel')
 const doctorModel = require('../models/doctorModel')
 const bcrpyt = require('bcryptjs')
+const userAppointmentModel = require('../models/userAppointmentModel')
 
 const registerController = async(req,res) => {
     try{
@@ -19,6 +20,8 @@ const registerController = async(req,res) => {
         req.body.password = hashedPassword
         const newUser = new userModel(req.body)
         await newUser.save()
+        const newAppointment = new userAppointmentModel(req.body)
+        await newAppointment.save()
         res.status(201).send({message:`Registration,`,sucess:true})
     }
     catch(err){
@@ -81,12 +84,13 @@ const authCtrl = async(req,res) => {
 const getAppointments = async(req,res) =>
 {
     try{
-        const appointments = await appointmentModel.find({})
-
-        return res.status(200).send({
-            success:true,
-            data: appointments
-        })
+        const appointments = await userAppointmentModel.findOne({name:req.body.name})
+        if(appointments)
+        { return res.status(200).send({success:true,message: "fetched appointments",data: appointments})}
+        else{
+            return res.status(500).send({success:false,message: "Not found"})
+        }
+       
     }
     catch(err)
     {
@@ -117,5 +121,34 @@ const getSpecDoctor = async(req,res) =>
             console.log(err)
         }
     }
+const bookAppointment = async(req,res) =>
+{
+    try{
+        await userAppointmentModel.findOneAndUpdate({userName:req.body.name},{$push : {upcommingAppointments:req.body}})
+        return res.status(200).send({success:true,message: "Done"})
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).send({sucess:false, message: `Register ${err.message}`})
+    }
+}
 
-module.exports = {loginController, registerController, authCtrl ,getAppointments,getSpecDoctor};
+const removeAppointment = async(req,res) =>
+{
+    try{
+        const app = await userAppointmentModel.findOne({userName:req.body.name})
+        console.log(app)
+        const index = app.upcommingAppointments.findIndex((element) => {
+            return element.date == req.body.date && element.timeSlot == req.body.timeSlot
+        })
+        app.upcommingAppointments.splice(index,1)
+        await userAppointmentModel.findOneAndUpdate({userName:req.body.name},{upcommingAppointments:app.upcommingAppointments})
+        return res.status(200).send({success:true,message:"removed"})
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+module.exports = {loginController, registerController, authCtrl ,getAppointments,getSpecDoctor,bookAppointment,removeAppointment};

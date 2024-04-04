@@ -9,6 +9,7 @@ import {
   Form,
   TimePicker,
   DatePicker,
+  message,
 } from "antd";
 import axios from "axios";
 import { useState } from "react";
@@ -22,7 +23,8 @@ const BookAppointments = () => {
   const [doctors, setDoctors] = useState([]);
   const [bookModalOpen, setBookModalOpen] = useState(false);
   const [currentRecord, setCurrentRecord] = useState([]);
-
+  const [currentDate, setCurrentDate] = useState([]);
+  const [disTime, setDisTime] = useState([]);
   const col = [
     {
       title: "Name",
@@ -94,24 +96,74 @@ const BookAppointments = () => {
     setBookModalOpen(false);
   };
 
-  const saveValues = (values) => {
-    const userappointment = [
-      {
-        userName: user.name,
-        upcommingAppointments: {
-          doctorName: currentRecord.firstName + " " + currentRecord.lastName,
-          specialization: currentRecord.specialization,
-          phone: currentRecord.phone,
-          email: currentRecord.email,
-          date: values.date,
-          timeSlot: values.time,
-        },
-      },
-    ];
+  const saveValues = async (values) => {
+    const userappointment = {
+      name: user?.name,
+      doctorName: currentRecord.firstName + " " + currentRecord.lastName,
+      specialization: currentRecord.specialization,
+      phone: currentRecord.phone,
+      email: currentRecord.email,
+      date: values.date,
+      timeSlot: values.time,
+    };
 
-    console.log(userappointment);
+    const doctorappointment = {
+      name: currentRecord.name,
+      userName: user?.name,
+      date: values.date,
+      timeSlot: values.time,
+    };
+    try {
+      console.log(userappointment);
+      const res = await axios.post(
+        "api/v1/user/bookAppointment",
+        userappointment
+      );
+      if (res.data.success) {
+        message.success("Booked!");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
+    try {
+      const res = await axios.post(
+        "api/v1/doctor/addAppointment",
+        doctorappointment
+      );
+      if (res.data.sucess) {
+        console.log("added in doctor aswell");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+  const getCurrentAppointment = async () => {
+    try {
+      const res = await axios.post("api/v1/doctor/getAppointment", {
+        name: currentRecord.name,
+      });
+      if (res.data.success) {
+        setCurrentDate(res.data.data);
+      } else {
+        console.log("test");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const checkdisabledTime = (date) => {
+    getCurrentAppointment();
+    let times = [];
+    currentDate.forEach((element) => {
+      if (moment(element.date).format("YYYY-MM-DD") == date) {
+        times.push(moment(element.timeSlot).format("H"));
+      }
+      setDisTime(times);
+    });
+  };
   const disabledTime = () => {
     return {
       disabledHours: () => {
@@ -123,7 +175,14 @@ const BookAppointments = () => {
           moment(currentRecord.timings[1]).format("HH") -
           moment(currentRecord.timings[0]).format("HH") +
           1;
-        disabled.splice(5, interval);
+        disabled.splice(
+          moment(currentRecord.timings[0]).format("HH"),
+          interval
+        );
+        disTime.forEach((element) => {
+          disabled.push(Number(element));
+        });
+        //console.log(disabled);
         return disabled;
       },
     };
@@ -143,7 +202,9 @@ const BookAppointments = () => {
       >
         <Form layout="vertical" onFinish={saveValues}>
           <Form.Item label="Date" name="date">
-            <DatePicker></DatePicker>
+            <DatePicker
+              onChange={(date, dateString) => checkdisabledTime(dateString)}
+            ></DatePicker>
           </Form.Item>
           <Form.Item label="Time" name="time">
             <TimePicker
@@ -153,7 +214,11 @@ const BookAppointments = () => {
               showNow={false}
             ></TimePicker>
           </Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button
+            type="primary"
+            htmlType="submit"
+            onClick={() => setBookModalOpen(false)}
+          >
             Confirm
           </Button>
         </Form>
