@@ -22,6 +22,7 @@ const BookAppointments = () => {
   const [doctors, setDoctors] = useState([]);
   const [bookModalOpen, setBookModalOpen] = useState(false);
   const [currentRecord, setCurrentRecord] = useState([]);
+
   const col = [
     {
       title: "Name",
@@ -94,7 +95,7 @@ const BookAppointments = () => {
   };
 
   const saveValues = (values) => {
-    const appointment = [
+    const userappointment = [
       {
         userName: user.name,
         upcommingAppointments: {
@@ -108,19 +109,21 @@ const BookAppointments = () => {
       },
     ];
 
-    console.log(appointment);
+    console.log(userappointment);
   };
 
   const disabledTime = () => {
     return {
       disabledHours: () => {
-        const disabled = [];
-        for (let i = 0; i < 24; i++) {
-          if (i < 5 || i > 11) {
-            disabled.push(i);
-          }
-        }
-
+        let disabled = [
+          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+          20, 21, 22, 23, 24,
+        ];
+        const interval =
+          moment(currentRecord.timings[1]).format("HH") -
+          moment(currentRecord.timings[0]).format("HH") +
+          1;
+        disabled.splice(5, interval);
         return disabled;
       },
     };
@@ -147,6 +150,7 @@ const BookAppointments = () => {
               format="HH"
               disabledTime={disabledTime}
               use12Hours
+              showNow={false}
             ></TimePicker>
           </Form.Item>
           <Button type="primary" htmlType="submit">

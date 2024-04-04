@@ -3,8 +3,8 @@ import axios from "axios";
 import { Layout, Menu } from "antd";
 import "../styles/PatientStyle.css";
 import UserProfile from "../components/UserProfile";
+import DoctorProfile from "../components/DoctorProfile";
 import { UserSideBar, DoctorSideBar, AdminSideBar } from "../data/SideBar";
-import Homepage from "./HomePage";
 import Dashboard from "../pages/Dashboard";
 import Doctors from "../pages/Doctors";
 import Users from "../pages/Users";
@@ -15,20 +15,21 @@ import BookAppointments from "./BookAppointments";
 import MedicalRecords from "./MedicalRecords";
 
 const { Header, Content, Sider } = Layout;
-const pages = {
-  profile: UserProfile,
-  dashboard: Dashboard,
-  appoinments: BookAppointments,
-  "medical records": MedicalRecords,
-  doctors: Doctors,
-  users: Users,
-  "add doctor": addDoctor,
-};
 
 const item = "profile";
 
 const Patient = () => {
   const { user } = useSelector((state) => state.user);
+  const pages = {
+    profile: user.isDoctor ? UserProfile : DoctorProfile,
+    dashboard: Dashboard,
+    appoinments: BookAppointments,
+    "medical records": MedicalRecords,
+    doctors: Doctors,
+    users: Users,
+    "add doctor": addDoctor,
+    announcements: MedicalRecords,
+  };
   const sidebar = () => {
     if (user) {
       if (user.isAdmin) {
