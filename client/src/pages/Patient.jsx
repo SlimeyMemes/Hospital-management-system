@@ -21,7 +21,7 @@ const item = "profile";
 const Patient = () => {
   const { user } = useSelector((state) => state.user);
   const pages = {
-    profile: user.isDoctor ? UserProfile : DoctorProfile,
+    profile: user?.isDoctor ? DoctorProfile : UserProfile,
     dashboard: Dashboard,
     appoinments: BookAppointments,
     "medical records": MedicalRecords,
