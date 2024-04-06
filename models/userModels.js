@@ -21,13 +21,20 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    notification:{
+    medicalRecords:{
         type:Array,
-        default: [],
-    },
-    seennotification: {
-        type:Array,
-        default: []
+        filename:{
+            type:String,
+            required:true
+        },
+        contentType:{
+            type:String,
+            default: 'application/pdf'
+        },
+        data:{
+            type:Buffer,
+            required:true
+        }
     }
 })
 
