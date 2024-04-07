@@ -9,7 +9,7 @@ const UserProfile = () => {
   const [upcommingAppointments, setupcommingAppointments] = useState([]);
   const [completedAppointments, setcompletedAppointments] = useState([]);
   const getAppointments = async () => {
-  console.log(user)
+    console.log(user);
     try {
       const res = await axios.get("/api/v1/user/getAppointments", user.name);
       if (res.data.success) {
@@ -37,6 +37,9 @@ const UserProfile = () => {
     {
       title: "Date",
       dataIndex: "date",
+      render: (text) => {
+        return moment(text).format("YYYY-MM-DD");
+      },
     },
     {
       title: "Remarks",

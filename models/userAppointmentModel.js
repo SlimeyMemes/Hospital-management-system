@@ -56,6 +56,7 @@ const userAppointment = new mongoose.Schema({
         },
         remarks:{
             type:String,
+            required:[false]
         }
     }
 })

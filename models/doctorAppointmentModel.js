@@ -38,6 +38,10 @@ const doctorAppointment = new mongoose.Schema({
             type:Array,
             required:[true]
         },
+        reason:{
+            type:String,
+            require:[true]
+        },
         remarks:{
             type:String,
             reqruied:[false]
