@@ -12,24 +12,26 @@ import { useSelector } from "react-redux";
 import UserPic from "../components/UserPic";
 import addDoctor from "../pages/addDoctor";
 import BookAppointments from "./BookAppointments";
-import MedicalRecords from "./MedicalRecords";
 
 const { Header, Content, Sider } = Layout;
 
-const item = "profile";
+let item = "profile";
 
 const Patient = () => {
   const { user } = useSelector((state) => state.user);
+  if (user?.isAdmin) {
+    item = "users";
+  }
+
   const pages = {
     profile: user?.isDoctor ? DoctorProfile : UserProfile,
     dashboard: Dashboard,
     appoinments: BookAppointments,
-    "medical records": MedicalRecords,
     doctors: Doctors,
     users: Users,
     "add doctor": addDoctor,
-    announcements: MedicalRecords,
   };
+
   const sidebar = () => {
     if (user) {
       if (user.isAdmin) {

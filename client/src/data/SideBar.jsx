@@ -7,26 +7,22 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 
-const a = ["Profile", "Appoinments", "Medical Records", "Log Out"];
-const user = [
-  UserOutlined,
-  LaptopOutlined,
-  SnippetsOutlined,
-  LogoutOutlined,
-].map((icon, index) => {
-  const key = a[index];
-  return {
-    icon: React.createElement(icon),
-    label: `${key}`,
-    key: `${key.toLowerCase()}`,
-  };
-});
+const a = ["Profile", "Appoinments", "Log Out"];
+const user = [UserOutlined, LaptopOutlined, LogoutOutlined].map(
+  (icon, index) => {
+    const key = a[index];
+    return {
+      icon: React.createElement(icon),
+      label: `${key}`,
+      key: `${key.toLowerCase()}`,
+    };
+  }
+);
 
 export const UserSideBar = user;
 
-const b = ["Dashboard", "Add Doctor", "Doctors", "Users", "Log Out"];
+const b = ["Add Doctor", "Doctors", "Users", "Log Out"];
 const admin = [
-  UserOutlined,
   LaptopOutlined,
   NotificationOutlined,
   SnippetsOutlined,
@@ -42,20 +38,8 @@ const admin = [
 
 export const AdminSideBar = admin;
 
-const c = [
-  "Profile",
-  "Appoinments",
-  "Announcements",
-  "Medical Records",
-  "Log Out",
-];
-const doctor = [
-  LaptopOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-  SnippetsOutlined,
-  LogoutOutlined,
-].map((icon, index) => {
+const c = ["Profile", "Log Out"];
+const doctor = [LaptopOutlined, LogoutOutlined].map((icon, index) => {
   const key = c[index];
   return {
     icon: React.createElement(icon),
