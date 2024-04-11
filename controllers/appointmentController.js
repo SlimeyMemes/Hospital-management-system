@@ -58,15 +58,15 @@ const completeAppointment = async(req,res) =>
         docapp.upcomingAppointments.splice(index,1)
         await doctorAppointmentModel.findOneAndUpdate({name:req.body.doctorName},{upcomingAppointments:docapp.upcomingAppointments});
 
-        const userapp = await userAppointmentModel.findOne({userName:req.body.userName})
+        const userapp = await userAppointmentModel.findOne({name:req.body.userName})
         console.log(userapp)
         const userindex = userapp.upcommingAppointments.findIndex((element) => {
             return element.date == req.body.date && element.timeSlot == req.body.timeSlot })
             console.log(userindex)
         const removed = userapp.upcommingAppointments.splice(userindex,1)
         removed[0].remarks = req.body.remarks
-        await userAppointmentModel.findOneAndUpdate({userName:req.body.userName},{upcommingAppointments:userapp.upcommingAppointments})
-        await userAppointmentModel.findOneAndUpdate({userName:req.body.userName} ,{$push:{completedAppointments:removed[0]}})
+        await userAppointmentModel.findOneAndUpdate({name:req.body.userName},{upcommingAppointments:userapp.upcommingAppointments})
+        await userAppointmentModel.findOneAndUpdate({name:req.body.userName} ,{$push:{completedAppointments:removed[0]}})
         return res.status(200).send({success:true,message:"completed appointment"})
     }
     catch(err)

@@ -84,6 +84,7 @@ const authCtrl = async(req,res) => {
 const getAppointments = async(req,res) =>
 {
     try{
+        //console.log(req)
         const appointments = await userAppointmentModel.findOne({name:req.body.name})
         if(appointments)
         { return res.status(200).send({success:true,message: "fetched appointments",data: appointments})}
@@ -100,7 +101,7 @@ const getAppointments = async(req,res) =>
 
 const getSpecDoctor = async(req,res) =>
 {
-    console.log(req.body)
+
      try{
        const docs = await doctorModel.find({specialization:req.body.specialization})
         if(!docs){
@@ -124,7 +125,8 @@ const getSpecDoctor = async(req,res) =>
 const bookAppointment = async(req,res) =>
 {
     try{
-        await userAppointmentModel.findOneAndUpdate({userName:req.body.name},{$push : {upcommingAppointments:req.body}})
+
+        await userAppointmentModel.findOneAndUpdate({name:req.body.name},{$push : {upcommingAppointments:req.body}})
         return res.status(200).send({success:true,message: "Done"})
     }
     catch(err){
@@ -136,13 +138,13 @@ const bookAppointment = async(req,res) =>
 const removeAppointment = async(req,res) =>
 {
     try{
-        const app = await userAppointmentModel.findOne({userName:req.body.name})
+        const app = await userAppointmentModel.findOne({name:req.body.name})
         console.log(app)
         const index = app.upcommingAppointments.findIndex((element) => {
             return element.date == req.body.date && element.timeSlot == req.body.timeSlot
         })
         app.upcommingAppointments.splice(index,1)
-        await userAppointmentModel.findOneAndUpdate({userName:req.body.name},{upcommingAppointments:app.upcommingAppointments})
+        await userAppointmentModel.findOneAndUpdate({name:req.body.name},{upcommingAppointments:app.upcommingAppointments})
         return res.status(200).send({success:true,message:"removed"})
     }
     catch(err)

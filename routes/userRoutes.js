@@ -13,7 +13,7 @@ router.post('/login',loginController)
 //Auth
 router.post('/getUser',authMiddleware, authCtrl)
 
-router.get('/getAppointments',getAppointments)
+router.post('/getAppointments',getAppointments)
 router.post('/getSpecDoctor',getSpecDoctor)
 //appointments
 router.post('/bookAppointment',bookAppointment)

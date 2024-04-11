@@ -9,9 +9,11 @@ const UserProfile = () => {
   const [upcommingAppointments, setupcommingAppointments] = useState([]);
   const [completedAppointments, setcompletedAppointments] = useState([]);
   const getAppointments = async () => {
-    console.log(user);
+    console.log(user.name);
     try {
-      const res = await axios.get("/api/v1/user/getAppointments", user.name);
+      const res = await axios.post("/api/v1/user/getAppointments", {
+        name: user.name,
+      });
       if (res.data.success) {
         setupcommingAppointments(res.data.data.upcommingAppointments);
         setcompletedAppointments(res.data.data.completedAppointments);
